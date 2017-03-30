@@ -35,11 +35,14 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
     private float mFlagHeight;
     //原点的纵向位置
     private float mStartY;
+    private float mStartMaxY;
+    private float mStartMinY;
     //偏移量
     private int offset;
     //控制offset值动画
     private ValueAnimator mValueAnimator;
     private Handler mHandler = new Handler();
+    private int mProgress = 0;
 
     public WaveView(Context context) {
         this(context,null);
@@ -68,7 +71,9 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
         mViewHeight = h;
         mWaveWidth = w / 2 ;
         mFlagHeight = h / 12;
-        mStartY = h / 2;
+        mStartMinY = mViewHeight - mFlagHeight * 2;
+        mStartMaxY = mFlagHeight * 2;
+        mStartY = mStartMinY;
         mValueAnimator = ValueAnimator.ofInt(-mWaveWidth,0);
         mValueAnimator.setDuration(800);
         mValueAnimator.setInterpolator(new LinearInterpolator());
@@ -79,7 +84,7 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
             public void run() {
                 mValueAnimator.start();
             }
-        },500);
+        },200);
     }
 
     @Override
@@ -109,6 +114,17 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
         offset = (Integer) valueAnimator.getAnimatedValue();
+        invalidate();
+    }
+
+    /**
+     * 设置进度
+     */
+    public void setProgress(int progress){
+        if (progress < 0 || progress > 100)
+            return;
+        mProgress = progress;
+        mStartY = mStartMinY - (float) progress / 100 * Math.abs(mStartMaxY - mStartMinY);
         invalidate();
     }
 }
