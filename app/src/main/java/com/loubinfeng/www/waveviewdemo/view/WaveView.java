@@ -60,8 +60,9 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
     private void init(){
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.parseColor("#35000000"));
+        mPaint.setColor(Color.parseColor("#8800FF00"));
         mPath = new Path();
+        setBackgroundColor(Color.parseColor("#3500FF00"));
     }
 
     @Override
@@ -72,7 +73,7 @@ public class WaveView extends View implements ValueAnimator.AnimatorUpdateListen
         mWaveWidth = w / 2 ;
         mFlagHeight = h / 12;
         mStartMinY = mViewHeight - mFlagHeight * 2;
-        mStartMaxY = mFlagHeight * 2;
+        mStartMaxY =  -mFlagHeight;
         mStartY = mStartMinY;
         mValueAnimator = ValueAnimator.ofInt(-mWaveWidth,0);
         mValueAnimator.setDuration(800);
